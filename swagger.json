@@ -1,0 +1,208 @@
+swagger: '2.0'
+info:
+  version: 0.1.1
+  title: 'Caché  Document Model REST API'
+basePath: /api/document/v1
+host: localhost:57780
+schemes:
+  - http
+  - https
+securityDefinitions:
+  basicAuth:
+    type: basic
+    description: HTTP Basic Authentication. Works over 'HTTP' and 'HTTPS'
+consumes:
+  - application/json
+produces:
+  - application/json
+  - text/plain
+paths:
+  /{database}:
+    get:
+      security:
+       - basicAuth: []
+      summary: Returns collections for a database
+      tags:
+        - Document DM
+      description: Returns collections in the Document model
+      produces:
+        - application/json
+        - text/plain
+      parameters:
+        - name: database
+          in: path
+          type: string
+          description: name of the database
+          required: true
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Collections'                               
+  /{database}/{collection}:
+    get:
+      security:
+       - basicAuth: []
+      summary: Returns all documents for a collection
+      tags:
+        - Document DM
+      description: Returns all documents from a collection of the Document model
+      produces:
+        - application/json
+        - text/plain
+      parameters:
+        - name: database
+          in: path
+          type: string
+          description: name of the database
+          required: true
+        - name: collection
+          in: path
+          type: string
+          description: name of the collection
+          required: true
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Collection'
+    post:
+      security:
+       - basicAuth: []
+      summary: insert a document in a collection
+      tags:
+        - Document DM
+      description: insert a document
+      produces:
+        - application/json
+        - text/plain
+      parameters:
+        - name: database
+          in: path
+          type: string
+          description: name of the database
+          required: true
+        - name: collection
+          in: path
+          type: string
+          description: name of the collection
+          required: true
+        - name: body
+          in: body
+          description: Document to be inserted
+          required: true               
+      responses:
+        '200':
+          description: successful operation
+  /{database}/{collection}/{key}:
+    put:
+      security:
+       - basicAuth: []
+      summary: updates a document in a collection
+      tags:
+        - Document DM
+      description: insert a document
+      produces:
+        - application/json
+        - text/plain
+      parameters:
+        - name: database
+          in: path
+          type: string
+          description: name of the database
+          required: true
+        - name: collection
+          in: path
+          type: string
+          description: name of the collection
+          required: true
+        - name: key
+          in: path
+          type: string
+          description: document id
+          required: true
+        - name: body
+          in: body
+          description: Document to be updated
+          required: true
+      responses:
+        '200':
+          description: successful operation                   
+  /{database}/{collection}?action=query:
+    post:
+      security:
+       - basicAuth: []
+      summary: Returns filtered documents for a collection
+      tags:
+        - Document DM
+      description: Returns all documents from a collection of the Document model
+      produces:
+        - application/json
+        - text/plain
+      parameters:
+        - name: database
+          in: path
+          type: string
+          description: name of the database
+          required: true
+        - name: collection
+          in: path
+          type: string
+          description: name of the collection
+          required: true
+        - name: body
+          in: body
+          schema:
+            $ref: '#/definitions/Query'                   
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Collection'
+definitions:
+  Collections:
+    type: object
+    properties:
+      content:
+        type: array
+        items: string
+      size:
+        type: integer
+        example: 5
+  Collection:
+    type: object
+    properties:
+      collection:
+        type: string
+        example: states
+      size:
+        type: integer
+        example: 50
+      content:
+        type: array
+        items:
+          $ref: '#/definitions/Documents'
+  Documents:
+    type: object
+    properties:
+      documentID:
+        type: integer
+        example: 1
+      documentVersion:
+        type: integer
+        example: 1
+      content:
+        type: string
+        example: any json structure
+  Query:
+    type: object
+    properties:
+      limit:
+        type: integer
+        example: 1000
+      columns:
+        type: string
+        example: []
+      restriction:
+        type: string
+        example: ''
