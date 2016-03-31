@@ -1,7 +1,7 @@
 swagger: '2.0'
 info:
-  version: 0.1.1
-  title: 'Caché  Document Model REST API'
+  version: 2016.2.0.594
+  title: 'Caché  Document Data Model (DocDM) REST API'
 basePath: /api/document/v1
 host: localhost:57780
 schemes:
@@ -23,7 +23,7 @@ paths:
        - basicAuth: []
       summary: Returns collections for a database
       tags:
-        - Document DM
+        - Collections
       description: Returns collections in the Document model
       produces:
         - application/json
@@ -45,7 +45,7 @@ paths:
        - basicAuth: []
       summary: Returns all documents for a collection
       tags:
-        - Document DM
+        - Collections
       description: Returns all documents from a collection of the Document model
       produces:
         - application/json
@@ -71,7 +71,7 @@ paths:
        - basicAuth: []
       summary: insert a document in a collection
       tags:
-        - Document DM
+        - Collections
       description: insert a document
       produces:
         - application/json
@@ -94,13 +94,37 @@ paths:
       responses:
         '200':
           description: successful operation
+    delete:
+      security:
+       - basicAuth: []
+      summary: delete a collection from the database
+      tags:
+        - Collections
+      description: insert a document
+      produces:
+        - application/json
+        - text/plain
+      parameters:
+        - name: database
+          in: path
+          type: string
+          description: name of the database
+          required: true
+        - name: collection
+          in: path
+          type: string
+          description: name of the collection
+          required: true
+      responses:
+        '200':
+          description: successful operation
   /{database}/{collection}/{key}:
     put:
       security:
        - basicAuth: []
       summary: updates a document in a collection
       tags:
-        - Document DM
+        - Collections
       description: insert a document
       produces:
         - application/json
@@ -128,13 +152,42 @@ paths:
       responses:
         '200':
           description: successful operation                   
+    delete:
+      security:
+       - basicAuth: []
+      summary: deletes a document from a collection
+      tags:
+        - Collections
+      description: delete a document
+      produces:
+        - application/json
+        - text/plain
+      parameters:
+        - name: database
+          in: path
+          type: string
+          description: name of the database
+          required: true
+        - name: collection
+          in: path
+          type: string
+          description: name of the collection
+          required: true
+        - name: key
+          in: path
+          type: string
+          description: document id
+          required: true
+      responses:
+        '200':
+          description: successful operation                   
   /{database}/{collection}?action=query:
     post:
       security:
        - basicAuth: []
       summary: Returns filtered documents for a collection
       tags:
-        - Document DM
+        - Collections
       description: Returns all documents from a collection of the Document model
       produces:
         - application/json
